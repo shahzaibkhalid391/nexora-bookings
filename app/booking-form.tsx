@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 
 type Service = {
   name: string;
@@ -62,6 +62,19 @@ export default function BookingForm({ services }: BookingFormProps) {
       );
     }
   }
+
+  const [minDate, setMinDate] = useState("");
+
+  useEffect(() => {
+    const today = new Date();
+    const localDate = new Date(
+      today.getTime() - today.getTimezoneOffset() * 60000,
+    )
+      .toISOString()
+      .split("T")[0];
+
+    setMinDate(localDate);
+  }, []);
 
   return (
     <section
@@ -167,7 +180,7 @@ export default function BookingForm({ services }: BookingFormProps) {
                     name="date"
                     type="date"
                     required
-                    min={new Date().toLocaleDateString("en-CA")}
+                    min={minDate || undefined}
                     className="w-full min-w-0 border border-black/15 bg-white px-3 py-3 text-sm outline-none focus:border-[#a47d42]"
                   />
                 </div>
